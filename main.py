@@ -1,6 +1,5 @@
 from bottle import route, run, static_file
 import json
-import csv
 
 @route("/routes/riga")
 def root():

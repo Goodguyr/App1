@@ -1,3 +1,4 @@
+import csv
 def getStopData(id):
     with open("shapes.txt") as file:
         info = csv.reader(file)
