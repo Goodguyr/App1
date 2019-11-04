@@ -1,76 +1,19 @@
-function loadMap() {  
-    // example data, you will replace it later
-    var data = [{
-      type:'scattermapbox',
-      lat:['56.95730993','56.95606','56.95608'],
-      lon:['24.11768354456','24.11768354456','24.121'],
-      mode:'markers',
-      marker: {
-        size:14,
-        color: "rgb(255,0,255)"
-      },
-      text:['Riga']
-    }]
-  
-  // example layout config, you will replace it later
-    var layout = {
-      autosize: true,
-      hovermode:'closest',
-      mapbox: {style: 'streets',
-        bearing:0,
-        center: {
-          lat:56.95731,
-          lon:24.11768
-        },
-        pitch:0,
-        zoom:14
-      },
+class setupMapData {
+  constructor(array) {
+    this.type = "scattermapbox";
+    this.mode = "markers";
+    this.marker = {}
+    this.marker.size = 5
+    this.marker.color = rgb(255, 0, 0)
+    this.lat = [];
+    this.lon = [];
+    this.text = [];
+    for (let i = 0; i < array.length; i++) {
+      this.lat.append(array[i][0]);
+      this.lon.append(array[i][1]);
+      this.text.append(array[i][2]);
     }
-  
-  // REPLACE THE TOKEN WITH YOUR OWN!!!
-    Plotly.setPlotConfig({
-      mapboxAccessToken: 'pk.eyJ1IjoiZ3VuZGVnYSIsImEiOiJjazJjZjZpZ24wYTk4M29xbWwwMmszNjVjIn0.eCj9qYJgdYNtdZKSm7oyaA'
-    })
-  
-    // LAST STEP 
-    // uncomment the following block 
-    // when all your functions are defined and working
-    /*
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function(){
-          if (this.readyState === 4 && this.status === 200){
-              console.log(this.response);
-  
-              // var mapParams = getMapParams(this.response);
-              // Plotly.plot('map', mapParams.data, mapParams.layout);
-          }
-      };
-      xhttp.open("GET", "/routes/riga");
-      xhttp.send();
-    */
-  
-    Plotly.plot('map', data, layout)
-  
   }
-  
-  function setupMapData(array){
-    let info = {}
-    info[type] = "scattermapbox"
-    info[mode] = "markers"
-    info[marker] = {
-        size = 5,
-        color = rgb(255,0,0)
-    }
-    info[lat] = []
-    info[lon] = []
-    info[text] = []
-    for(let i = 0; i < array.length; i++){
-
-        info[lat].append(array[i][0])
-        info[lon].append(array[i][1])
-        info[text].append(array[i][2])
-    }
-    return info
 }
   
   function findCenter(array) {
@@ -97,15 +40,39 @@ function loadMap() {
       return [avgLat, avgLon]
   }
   
-  function setupMapLayout(array) {
-    let info = {}
-    info[mapbox] = {}
-    info[mapbox][style] = "streets"
-    info[mapbox][zoom] = 12
-    info[mapbox][center] = findCenter(array)
+class setupMapLayout {
+  constructor(array) {
+    let centerInfo = findCenter(array);
+    this.mapbox = {};
+    this.mapbox.style = "streets";
+    this.mapbox.zoom = 12;
+    this.mapbox.center = {};
+    this.mapbox.center.lat = centerInfo[0];
+    this.mapbox.center.lon = centerInfo[1];
   }
+}
   
-  function getMapParams(file) {
+class getMapParams {
+  constructor(file) {
+    let array = JSON.parse(file);
+    this.data = [new setupMapData(array)];
+    this.layout = new setupMapLayout(array);
+  }
+}
+  
+
+      function loadMap() {  
+        Plotly.setPlotConfig({ mapboxAccessToken: 'pk.eyJ1IjoiZ29vZGd1eXIiLCJhIjoiY2syaDl1cnBkMDR6NTNsb2tzd2xlaWp4byJ9.WXmbbhPCIYCYYwJMa5GgcA' });
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+          if (this.readyState === 4 && this.status === 200){
+              console.log(this.response);
+  
+              let mapParams = new getMapParams(this.response);
+              Plotly.plot('map', mapParams.data, mapParams.layout);
+          }
+      };
+      xhttp.open("GET", "/routes/riga");
+      xhttp.send();
+          }
       
-  }
-  
