@@ -4,14 +4,14 @@ class setupMapData {
     this.mode = "markers";
     this.marker = {}
     this.marker.size = 5
-    this.marker.color = rgb(255, 0, 0)
+    this.marker.color = "rgb(255, 0, 0)"
     this.lat = [];
     this.lon = [];
     this.text = [];
     for (let i = 0; i < array.length; i++) {
-      this.lat.append(array[i][0]);
-      this.lon.append(array[i][1]);
-      this.text.append(array[i][2]);
+      this.lat.push(array[i][0]);
+      this.lon.push(array[i][1]);
+      this.text.push(array[i][2]);
     }
   }
 }
@@ -23,7 +23,7 @@ class setupMapData {
       let minLon = 0
       for(let i = 0; i < array.length; i++){
           if(array[i][0] > maxLat){
-              maxLat = array[i]
+              maxLat = array[i][0]
           }
           if(array[i][0] < minLat){
               minLat = array[i][0]
@@ -61,18 +61,19 @@ class getMapParams {
 }
   
 
-      function loadMap() {  
-        Plotly.setPlotConfig({ mapboxAccessToken: 'pk.eyJ1IjoiZ29vZGd1eXIiLCJhIjoiY2syaDl1cnBkMDR6NTNsb2tzd2xlaWp4byJ9.WXmbbhPCIYCYYwJMa5GgcA' });
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function(){
-          if (this.readyState === 4 && this.status === 200){
-              console.log(this.response);
-  
-              let mapParams = new getMapParams(this.response);
-              Plotly.plot('map', mapParams.data, mapParams.layout);
-          }
-      };
-      xhttp.open("GET", "/routes/riga");
-      xhttp.send();
-          }
+function loadMap() {  
+  Plotly.setPlotConfig({ 
+  mapboxAccessToken: 'pk.eyJ1IjoiZ29vZGd1eXIiLCJhIjoiY2syaDl1cnBkMDR6NTNsb2tzd2xlaWp4byJ9.WXmbbhPCIYCYYwJMa5GgcA'});
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if (this.readyState === 4 && this.status === 200){
+      console.log(this.response);
+      let mapParams = new getMapParams(this.response);
+      Plotly.plot('map', mapParams.data, mapParams.layout);
+      console.log(mapParams.layout)
+    }
+  };
+  xhttp.open("GET", "/routes/riga");
+  xhttp.send();
+}
       
