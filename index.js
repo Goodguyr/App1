@@ -16,39 +16,62 @@ class setupMapData {
   }
 }
   
-  function findCenter(array) {
+function findCenter(array) {
+  let maxLat = 0
+  let minLat = 100
+  let maxLon = 0
+  let minLon = 100
+  for(let i = 0; i < array.length; i++){
+    if(array[i][0] > maxLat){
+      maxLat = array[i][0]
+    }
+    else if(array[i][0] < minLat){
+      minLat = array[i][0]
+    }
+    if(array[i][1] > maxLon){
+      maxLon = array[i][1]
+    }
+    else if(array[i][1] < minLon){
+      minLon = array[i][1]
+    }
+  }
+  let avgLat = (minLat + maxLat) / 2
+  let avgLon = (minLon + maxLon) / 2
+  return [avgLat, avgLon]
+}
+  
+class setupMapLayout {
+  constructor(array) {
+    this.mapbox = {};
+    this.mapbox.style = "streets";
+    this.mapbox.zoom = 12;
+    this.info = function findCenter(array) {
       let maxLat = 0
-      let minLat = 0
+      let minLat = 200
       let maxLon = 0
-      let minLon = 0
+      let minLon = 200
       for(let i = 0; i < array.length; i++){
-          if(array[i][0] > maxLat){
-              maxLat = array[i][0]
-          }
-          if(array[i][0] < minLat){
-              minLat = array[i][0]
-          }
-          if(array[i][1] > maxLon){
-              maxLon = array[i][1]
-          }
-          if(array[i][1] < minLon){
-              minLon = array[i][1]
-          }
+        if(array[i][0] > maxLat){
+          maxLat = array[i][0]
+        }
+        else if(array[i][0] < minLat){
+          minLat = array[i][0]
+        }
+        if(array[i][1] > maxLon){
+          maxLon = array[i][1]
+        }
+        else if(array[i][1] < minLon){
+          minLon = array[i][1]
+        }
       }
       let avgLat = (minLat + maxLat) / 2
       let avgLon = (minLon + maxLon) / 2
       return [avgLat, avgLon]
-  }
-  
-class setupMapLayout {
-  constructor(array) {
-    let centerInfo = findCenter(array);
-    this.mapbox = {};
-    this.mapbox.style = "streets";
-    this.mapbox.zoom = 12;
+      }
+    this.information = this.info(array)
     this.mapbox.center = {};
-    this.mapbox.center.lat = centerInfo[0];
-    this.mapbox.center.lon = centerInfo[1];
+    this.mapbox.center.lat = this.information[0];
+    this.mapbox.center.lon = this.information[1];
   }
 }
   
@@ -70,7 +93,7 @@ function loadMap() {
       console.log(this.response);
       let mapParams = new getMapParams(this.response);
       Plotly.plot('map', mapParams.data, mapParams.layout);
-      console.log(mapParams.layout)
+      console.log(mapParams.layout.mapbox.center.lat)
     }
   };
   xhttp.open("GET", "/routes/riga");
