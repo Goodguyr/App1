@@ -14,6 +14,6 @@ def index():
 
 @route("/routes/riga")
 def data():
-    return transport.getStopData("riga_bus_1_a-b")
+    return transport.getStopData("riga_bus_13_a-b")
 
 run(host="0.0.0.0", port=8080)
