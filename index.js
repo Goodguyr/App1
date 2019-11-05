@@ -54,9 +54,9 @@ class setupMapLayout {
   
 class getMapParams {
   constructor(file) {
-    let array = JSON.parse(file);
-    this.data = [new setupMapData(array)];
-    this.layout = new setupMapLayout(array);
+    let info = JSON.parse(file);
+    this.data = [new setupMapData(info)];
+    this.layout = new setupMapLayout(info);
   }
 }
   
