@@ -46,10 +46,10 @@ class setupMapLayout {
     this.mapbox.style = "streets";
     this.mapbox.zoom = 12;
     this.info = function findCenter(array) {
-      let maxLat = 0
-      let minLat = 200
-      let maxLon = 0
-      let minLon = 200
+      let maxLat = -91
+      let minLat = 91
+      let maxLon = -181
+      let minLon = 181
       for(let i = 0; i < array.length; i++){
         if(array[i][0] > maxLat){
           maxLat = array[i][0]
